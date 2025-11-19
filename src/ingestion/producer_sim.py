@@ -8,7 +8,7 @@ from kafka import KafkaProducer
 import random
 import os
 
-BOOTSTRAP = os.getenv("KAFKA_BOOTSTRAP", "localhost:9092")
+BOOTSTRAP = os.getenv("KAFKA_BOOTSTRAP", "host.docker.internal:9092")
 TOPIC = os.getenv("KAFKA_TOPIC", "weather_raw")
 INTERVAL = int(os.getenv("SIM_INTERVAL_SEC", 5))
 
@@ -32,10 +32,14 @@ if __name__ == "__main__":
     print(f"Producing to {BOOTSTRAP} -> topic {TOPIC} every {INTERVAL}s")
     try:
         while True:
+            print("Generating message...")
             msg = gen_sensor_event()
-            producer.send(TOPIC, msg)
-            producer.flush()
-            print(f"Produced: {msg}")
+            try:
+                producer.send(TOPIC, msg)
+                producer.flush()
+                print(f"Produced: {msg}")
+            except Exception as e:
+                print("Error producing message:", repr(e))
             time.sleep(INTERVAL)
     except KeyboardInterrupt:
         print("Stopping producer")

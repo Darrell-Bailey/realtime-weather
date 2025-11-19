@@ -16,7 +16,7 @@ services:
       - --kafka-addr
       - "PLAINTEXT://0.0.0.0:9092" # Bind to all interfaces
       - --advertise-kafka-addr
-      - "PLAINTEXT://redpanda:9092" # What other containers should use
+      - "PLAINTEXT://host.docker.internal:9092" # What other containers should use
     ports:
       - "9092:9092"   # Kafka protocol
       - "9644:9644"   # admin API
