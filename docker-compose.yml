@@ -1,5 +1,40 @@
 version: "3.8"
 services:
-  placeholder:
-    image: alpine
-    command: ["sh", "-c", "while true; do sleep 3600; done"]
+  redpanda:
+    image: vectorized/redpanda:latest
+    container_name: redpanda
+    command: 
+      - redpanda
+      - start
+      - --overprovisioned
+      - --smp
+      - "1"
+      - --memory
+      - "1G"
+      - --reserve-memory
+      - "0M"
+      - --check-false
+    ports:
+      - "9092:9092"   # Kafka protocol
+      - "9644:9644"   # admin API
+    volumes:
+      - redpanda_data:/var/lib/redpanda
+    healthcheck:
+      test: ["CMD", "rpk", "cluster", "info"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    
+  kafka_ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    environment:
+      KAFKA_CLUSTERS_0_NAME: "local"
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: "redpanda:9092"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - redpanda
+
+volumes:
+  redpanda_data:
