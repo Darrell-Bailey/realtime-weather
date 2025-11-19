@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "WeatherEvent",
+  "type": "object",
+  "properties": {
+    "event_id": {"type": "string"},
+    "sensor_id": {"type": "string"},
+    "timestamp": {"type": "string", "format": "date-time"},
+    "temperature_c": {"type": ["number","null"]},
+    "humidity": {"type": ["number","null"]},
+    "wind_speed_ms": {"type": ["number","null"]},
+    "wind_direction_deg": {"type": ["number","null"]},
+    "weather_code": {"type": ["integer","null"]},
+    "source": {"type": "string"},
+    "lat": {"type": ["number","null"]},
+    "lon": {"type": ["number","null"]},
+    "dew_point_c": {"type": ["number","null"]},
+    "ingested_at": {"type": "string", "format": "date-time"}
+  },
+  "required": ["event_id","sensor_id","timestamp","source","ingested_at"]
+}
