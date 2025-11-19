@@ -1,7 +1,6 @@
-version: "3.8"
 services:
   redpanda:
-    image: vectorized/redpanda:latest
+    image: redpandadata/redpanda:latest
     container_name: redpanda
     command: 
       - redpanda
@@ -13,7 +12,11 @@ services:
       - "1G"
       - --reserve-memory
       - "0M"
-      - --check-false
+      - --check=false
+      - --kafka-addr
+      - "PLAINTEXT://0.0.0.0:9092" # Bind to all interfaces
+      - --advertise-kafka-addr
+      - "PLAINTEXT://redpanda:9092" # What other containers should use
     ports:
       - "9092:9092"   # Kafka protocol
       - "9644:9644"   # admin API
